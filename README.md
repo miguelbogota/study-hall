@@ -5,12 +5,12 @@ Study hall es una herramineta que permite a tanto estudiantes como profesores da
 
 ## Caracteristicas y Frameworks usados
 
-* Back End - ver [README.md](https://github.com/miguelbogota/study-hall/back-end).
+* Back End - ver [README.md](https://github.com/miguelbogota/study-hall/tree/master/back-end).
   - [NestJS](https://nestjs.com/) - Backend Framework API.
 
 <br />
 
-* Front End  - ver [README.md](https://github.com/miguelbogota/study-hall/front-end).
+* Front End  - ver [README.md](https://github.com/miguelbogota/study-hall/tree/master/front-end).
   - [Angular 10](https://angular.io/) - Frontend Framework.
 
 ## Autor
