@@ -7,6 +7,7 @@ export interface Chat extends Document {
   readonly personId: string;
   readonly createdAt: Date;
   readonly text: string;
+  readonly isModerator: boolean;
 }
 
 /**
@@ -17,7 +18,7 @@ export interface Group extends Document {
   readonly videoUrl: string;
   readonly topic: string;
   readonly schedule: {
-    readonly dates: Date[];
+    readonly date: Date;
     readonly in: Date;
     readonly out: Date;
   };

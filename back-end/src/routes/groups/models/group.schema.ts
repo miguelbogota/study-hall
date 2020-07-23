@@ -5,8 +5,9 @@ import { Schema } from 'mongoose';
  */
 export const ChatSchema = new Schema({
   personId: String,
-  createdAt: Date,
-  text: String
+  createdAt: { type: Date, default: Date.now },
+  text: String,
+  isModerator: Boolean
 });
 
 /**
@@ -17,7 +18,7 @@ export const GroupSchema = new Schema({
   videoUrl: String,
   topic: String,
   schedule: {
-    dates: Date,
+    date: Date,
     in: Date,
     out: Date
   },

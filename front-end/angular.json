@@ -28,9 +28,15 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/boxicons/css/boxicons.min.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/jquery/dist/jquery.slim.min.js",
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -92,9 +98,15 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/boxicons/css/boxicons.min.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/jquery/dist/jquery.slim.min.js",
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+            ]
           }
         },
         "lint": {
@@ -123,6 +135,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "front-end"
+    }
+  },
+  "defaultProject": "front-end",
+  "cli": {
+    "analytics": "ed7a8497-bdf9-43d2-a108-b68e50e9de06"
+  }
 }

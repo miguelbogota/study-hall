@@ -1,0 +1,26 @@
+<div class="row" style="min-height: 800px;">
+  <div class="col-lg-6">
+
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon3">https://www.youtube.com/watch?v=</span>
+      </div>
+      <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" placeholder="Youtube Url" />
+    </div>
+
+    <iframe width="100%" height="370px" [src]="trustedUrl" *ngIf="trustedUrl" frameborder="0"
+      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="border rounded h-75">
+
+      <app-chat [mine]="true"></app-chat>
+      <app-chat [mine]="false"></app-chat>
+      <app-chat [mine]="false"></app-chat>
+      <app-chat [mine]="false"></app-chat>
+
+    </div>
+    <app-chat [create]="true"></app-chat>
+  </div>
+</div>
