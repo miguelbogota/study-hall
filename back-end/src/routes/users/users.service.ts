@@ -3,49 +3,113 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './models/user.interface';
 import { CreateUserDTO } from './models/user.dto';
-
+import { AuthService } from 'src/auth/auth.service';
+import { Observable, from, throwError } from 'rxjs';
+import { map, switchMap, catchError } from 'rxjs/operators';
 
 @Injectable()
 export class UsersService {
 
   constructor(
-    @InjectModel('User') private userModel: Model<User>
+    @InjectModel('User') private userModel: Model<User>,
+    private authService: AuthService
   ) { }
 
   /**
    * Funcion devuelve todos los usuarios en la db.
    */
-  public async getUsers(): Promise<User[]> {
-    const users = await this.userModel.find();
-    return users;
+  public getUsers(): Observable<User[]> {
+    return from(this.userModel.find())
+      .pipe(
+        map((users: User[]) => {
+          const newUsers = users.map((u) => {
+            const sendUser = {
+              _id: u._id,
+              username: u.username,
+              photoUrl: u.photoUrl,
+              status: u.status,
+              email: u.email,
+              subjectIds: u.subjectIds,
+              type: u.type
+            }
+            return sendUser as User;
+          })
+          return newUsers;
+        })
+      );
   }
 
   /**
    * Funcion devuelve un usuario especifico en la db con Id.
    * @param id Id del usuario a buscar.
    */
-  public async getUserById(id: string): Promise<User> {
-    const user = await this.userModel.findById(id);
-    return user;
+  public getUserById(id: string): Observable<User> {
+    return from(this.userModel.findById(id))
+      .pipe(
+        map((user: User) => {
+          const sendUser = {
+            _id: user._id,
+            username: user.username,
+            photoUrl: user.photoUrl,
+            status: user.status,
+            email: user.email,
+            subjectIds: user.subjectIds,
+            type: user.type
+          }
+          return sendUser as User;
+        })
+      );
   }
 
   /**
    * Funcion devuelve un usuario especifico en la db con username.
    * @param username Nombre de usuario del usuario a buscar.
    */
-  public async getUserByUsername(username: string): Promise<User> {
-    const user = await this.userModel.findOne({ "username": username });
-    return user;
+  public getUserByUsername(username: string): Observable<User> {
+    return from(this.userModel.findOne({ "username": username }))
+      .pipe(
+        map((user: User) => {
+          const sendUser = {
+            _id: user._id,
+            username: user.username,
+            photoUrl: user.photoUrl,
+            status: user.status,
+            email: user.email,
+            subjectIds: user.subjectIds,
+            type: user.type
+          }
+          return sendUser as User;
+        })
+      );
   }
 
   /**
    * Funcion agrega un usuario a la db y devuelve ese mismo usuario con el id.
    * @param createUserDTO Usuario a crear en la db.
    */
-  public async createUser(createUserDTO: CreateUserDTO): Promise<User> {
-    const newUser = new this.userModel(createUserDTO);
-    const savedUser = await newUser.save();
-    return savedUser;
+  public createUser(createUserDTO: CreateUserDTO): Observable<User> {
+    return this.authService.hashPassword(createUserDTO.password)
+      .pipe(
+        switchMap((pwdHash: string) => {
+          const newUser = new this.userModel(createUserDTO);
+          newUser.password = pwdHash;
+          return from(newUser.save()).pipe(
+            map((user: User) => {
+              const sendUser = {
+                _id: user._id,
+                username: user.username,
+                photoUrl: user.photoUrl,
+                status: user.status,
+                email: user.email,
+                subjectIds: user.subjectIds,
+                type: user.type
+              }
+              return sendUser as User;
+            }),
+            catchError(err => throwError(err))
+          );
+        })
+      );
   }
 
   /**
@@ -54,18 +118,63 @@ export class UsersService {
    * @param username Nombre de usuario del usuario a actualizar.
    * @param createUserDTO Usuario actializado a remplazar informacion.
    */
-  public async updateUser(username: string, createUserDTO: CreateUserDTO): Promise<User> {
-    const updatedUser = await this.userModel.findOneAndUpdate({ "username": username }, createUserDTO, { new: true });
-    return updatedUser;
+  public updateUser(username: string, createUserDTO: CreateUserDTO): Observable<User> {
+    delete createUserDTO.email;
+    delete createUserDTO.username;
+    delete createUserDTO.password;
+    return from(this.userModel.findOneAndUpdate({ "username": username }, createUserDTO, { new: true }));
   }
 
   /**
    * Funcion elimina un usuario de la db y devuelve al usuario eliminado.
    * @param username Nombre de usuario del usuario a eliminar.
    */
-  public async deleteUser(username: string): Promise<User> {
-    const deletedUser = await this.userModel.findOneAndRemove({ "username": username });
-    return deletedUser;
+  public deleteUser(username: string): Observable<User> {
+    return from(this.userModel.findOneAndRemove({ "username": username }));
+  }
+
+  public signIn(user: User): Observable<string> {
+    return this.validateUser(user.username, user.password)
+      .pipe(
+        switchMap((user: User) => {
+          if (user) {
+            return this.authService.generateJWT(user).pipe(map((jwt: string) => jwt));
+          }
+          else {
+            return 'Wrong credentials';
+          }
+        })
+      );
+  }
+
+  /**
+   * Funcion compara el usuario con el de la base de datos y devuelve el
+   * usuario si las credenciales son correctas.
+   * @param username Nombre de usuario a comparar.
+   * @param password Contraseña a comparar
+   */
+  private validateUser(username: string, password: string): Observable<User> {
+    return this.getUserByUsername(username)
+      .pipe(
+        switchMap((user: User) => this.authService.comparePassword(password, user.password)
+          .pipe(
+            map((match: boolean) => {
+              if (match) {
+                const sendUser = {
+                  _id: user._id,
+                  username: user.username,
+                  photoUrl: user.photoUrl,
+                  status: user.status,
+                  email: user.email,
+                  subjectIds: user.subjectIds,
+                  type: user.type
+                }
+                return sendUser as User;
+              }
+              else { throw Error; }
+            })
+          ))
+      );
   }
 
 }

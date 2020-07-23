@@ -1,48 +1,64 @@
-import { Controller, Get, Post, Put, Delete, Res, Body, Param, HttpStatus, NotFoundException } from '@nestjs/common';
-import { Response } from 'express';
+import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { User } from './models/user.interface';
 import { UsersService } from './users.service';
 import { CreateUserDTO } from './models/user.dto';
+import { Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 @Controller('users')
 export class UsersController {
 
   constructor(
     private userService: UsersService
-  ) {}
+  ) { }
+
+  @Post('/signin')
+  signIn(@Body() user: User): Observable<any> {
+    return this.userService.signIn(user)
+      .pipe(
+        map((jwt: string) => ({ access_token: jwt }))
+      );
+  }
 
   @Get('/')
-  async getUsers(@Res() res: Response): Promise<Response<User[]>> {
-    const users = await this.userService.getUsers();
-    return res.status(HttpStatus.OK).json(users);
+  getUsers(): Observable<User[]> {
+    return this.userService.getUsers();
   }
 
   @Get('/:username')
-  async getUser(@Res() res: Response, @Param('username') username: string): Promise<Response<User[]>> {
-    const user = await this.userService.getUserByUsername(username);
-    if (!user) { throw new NotFoundException('User does not exists!'); }
-    return res.status(HttpStatus.OK).json(user);
+  getUser(@Param('username') username: string): Observable<User | unknown> {
+    return this.userService.getUserByUsername(username)
+      .pipe(
+        map((user: User) => user),
+        catchError(err => of({ error: err.message }))
+      );
   }
 
   @Post('/')
-  async createUser(@Res() res: Response, @Body() createUserDTO: CreateUserDTO): Promise<Response<User>> {
-    const savedUser = await this.userService.createUser(createUserDTO);
-    if (!savedUser) { throw new NotFoundException('User was not saved!'); }
-    return res.status(HttpStatus.OK).json(savedUser);
+  createUser(@Body() createUserDTO: CreateUserDTO): Observable<User | unknown> {
+    return this.userService.createUser(createUserDTO)
+      .pipe(
+        map((user: User) => user),
+        catchError(err => of({ error: err.message }))
+      );
   }
 
   @Put('/:username')
-  async updateUser(@Res() res: Response, @Body() createUserDTO: CreateUserDTO, @Param('username') username: string): Promise<Response<User>> {
-    const updatedUser = await this.userService.updateUser(username, createUserDTO);
-    if (!updatedUser) { throw new NotFoundException('User does not exist!'); }
-    return res.status(HttpStatus.OK).json(updatedUser);
+  updateUser(@Body() createUserDTO: CreateUserDTO, @Param('username') username: string): Observable<User | unknown> {
+    return this.userService.updateUser(username, createUserDTO)
+      .pipe(
+        map((user: User) => user),
+        catchError(err => of({ error: err.message }))
+      );
   }
 
   @Delete('/:username')
-  async deleteUser(@Res() res: Response, @Param('username') username: string): Promise<Response<User>> {
-    const deletedUser = await this.userService.deleteUser(username);
-    if (!deletedUser) { throw new NotFoundException('User was not deleted!'); }
-    return res.status(HttpStatus.OK).json(deletedUser);
+  deleteUser(@Param('username') username: string): Observable<User | unknown> {
+    return this.userService.deleteUser(username)
+      .pipe(
+        map((user: User) => user),
+        catchError(err => of({ error: err.message }))
+      );
   }
 
 }
