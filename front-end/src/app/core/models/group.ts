@@ -2,6 +2,7 @@ export interface Chat {
   personId: string;
   createdAt: Date;
   text: string;
+  isModerator: boolean;
 }
 
 export interface Group {

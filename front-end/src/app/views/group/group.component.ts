@@ -24,7 +24,8 @@ export class GroupComponent implements OnInit {
       {
         personId: '345678',
         text: 'Hola!',
-        createdAt: new Date()
+        createdAt: new Date(),
+        isModerator: true
       }
     ]
   };
