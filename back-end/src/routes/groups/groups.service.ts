@@ -58,6 +58,13 @@ export class GroupsService {
     return updatedGroup;
   }
 
+  public async addChat(code: string, chat: Chat): Promise<Group> {
+    const updatedGroup = await this.groupModel.findOne({ "code": code });
+    updatedGroup.chats.push(chat);
+    const savedGroup = updatedGroup.save();
+    return savedGroup;
+  }
+
   /**
    * Funcion elimina un grupo de la db y devuelve el grupo eliminada.
    * @param code Codigo del grupo a eliminar.

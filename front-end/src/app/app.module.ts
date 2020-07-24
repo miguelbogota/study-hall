@@ -16,6 +16,7 @@ import { SubjectComponent } from './components/subject/subject.component';
 import { GroupDetailsComponent } from './components/group-details/group-details.component';
 import { ChatComponent } from './components/chat/chat.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { ClassesComponent } from './views/classes/classes.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { FooterComponent } from './components/footer/footer.component';
     SubjectComponent,
     GroupDetailsComponent,
     ChatComponent,
-    FooterComponent
+    FooterComponent,
+    ClassesComponent
   ],
   imports: [
     BrowserModule,

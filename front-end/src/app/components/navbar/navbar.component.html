@@ -11,10 +11,19 @@
     </div>
 
     <!-- Autenticacion y perfil -->
-    <div class="navbar-nav">
-      <a class="nav-item nav-link" [routerLink]="['/signin']" routerLinkActive="active">Iniciar Sesión</a>
-      <a class="nav-item nav-link" [routerLink]="['/signup']" routerLinkActive="active">Crear Cuenta</a>
-    </div>
+    <ng-container *ngIf="!authState; else signed">
+      <div class="navbar-nav">
+        <a class="nav-item nav-link" [routerLink]="['/signin']" routerLinkActive="active">Iniciar Sesión</a>
+        <a class="nav-item nav-link" [routerLink]="['/signup']" routerLinkActive="active">Crear Cuenta</a>
+      </div>
+    </ng-container>
+    <ng-template #signed>
+      <div class="navbar-nav">
+        <a class="nav-item nav-link" [routerLink]="['/classes']" routerLinkActive="active">Classes</a>
+        <a class="nav-item nav-link" [routerLink]="['/profile/' + authState.username]" routerLinkActive="active">Perfil</a>
+        <a class="nav-item nav-link" style="cursor: pointer;" (click)="signOut()">Cerrar Sesión</a>
+      </div>
+    </ng-template>
 
   </div>
 </nav>

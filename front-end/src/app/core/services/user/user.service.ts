@@ -7,14 +7,16 @@ import { User } from 'src/app/core/models/user';
 })
 export class UserService {
 
-  url = 'localhost:2500/users';
-
   constructor(
     private http: HttpClient
   ) { }
 
   public async getUsers() {
-    return this.http.get<User[]>(this.url);
+    return this.http.get<User[]>('/api/users');
+  }
+
+  public getUser(userId: string) {
+    return this.http.get<User>(`/api/users/${userId}`);
   }
 
 }

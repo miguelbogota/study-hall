@@ -1,7 +1,21 @@
 <ng-container *ngIf="create; else show">
-
+  <form class="w-100" [formGroup]="textMessageForm" (ngSubmit)="sendMessage()">
+    <div class="input-group my-3 w-100">
+      <input class="form-control" type="text" placeholder="Escribe tu mensaje..." formControlName="message" />
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Enviar</button>
+      </div>
+    </div>
+  </form>
 </ng-container>
 
 <ng-template #show>
-
+  <div class="rounded border m-1 p-2" [ngClass]="{'text-right': mine}">
+    <h6 class="mb-1">
+      {{ chat.personId }}
+      <ng-container *ngIf="chat.isModerator"> | Profesor</ng-container>
+    </h6>
+    <p class="mb-0">{{ chat.text }}</p>
+    <small>{{ chat.createdAt | date:'mediumTime' }}</small>
+  </div>
 </ng-template>

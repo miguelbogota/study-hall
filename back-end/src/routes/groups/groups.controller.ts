@@ -1,8 +1,8 @@
 import { Controller, Get, Post, Put, Delete, Res, Body, Param, HttpStatus, NotFoundException } from '@nestjs/common';
 import { Response } from 'express';
-import { Group } from './models/group.interface';
+import { Group, Chat } from './models/group.interface';
 import { GroupsService } from './groups.service';
-import { CreateGroupDTO } from './models/group.dto';
+import { CreateGroupDTO, CreateChatDTO } from './models/group.dto';
 
 @Controller('groups')
 export class GroupsController {
@@ -34,6 +34,13 @@ export class GroupsController {
   @Put('/:code')
   async updateGroup(@Res() res: Response, @Body() createGroupDTO: CreateGroupDTO, @Param('code') code: string): Promise<Response<Group>> {
     const updatedGroup = await this.groupService.updateGroup(code, createGroupDTO);
+    if (!updatedGroup) { throw new NotFoundException('Group does not exist!'); }
+    return res.status(HttpStatus.OK).json(updatedGroup);
+  }
+
+  @Put('/chat/:code')
+  async updateChat(@Res() res: Response, @Body() chat: Chat, @Param('code') code: string): Promise<Response<Group>> {
+    const updatedGroup = await this.groupService.addChat(code, chat);
     if (!updatedGroup) { throw new NotFoundException('Group does not exist!'); }
     return res.status(HttpStatus.OK).json(updatedGroup);
   }

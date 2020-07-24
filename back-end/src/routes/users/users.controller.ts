@@ -16,7 +16,8 @@ export class UsersController {
   signIn(@Body() user: User): Observable<any> {
     return this.userService.signIn(user)
       .pipe(
-        map((jwt: string) => ({ access_token: jwt }))
+        map((jwt: string) => ({ access_token: jwt })),
+        catchError(err => of({ error: err.message }))
       );
   }
 

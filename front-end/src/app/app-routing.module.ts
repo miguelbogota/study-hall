@@ -6,13 +6,17 @@ import { SigninComponent } from './views/signin/signin.component';
 import { SignupComponent } from './views/signup/signup.component';
 import { ProfileComponent } from './views/profile/profile.component';
 import { GroupComponent } from './views/group/group.component';
+import { ClassesComponent } from './views/classes/classes.component';
+import { SignedInGuard } from 'src/app/core/guards/signed-in.guard';
+import { SignedOutGuard } from 'src/app/core/guards/signed-out.guard';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'signin', component: SigninComponent },
-  { path: 'signup', component: SignupComponent },
+  { path: 'signin', component: SigninComponent, canActivate: [SignedOutGuard] },
+  { path: 'signup', component: SignupComponent, canActivate: [SignedOutGuard] },
   { path: 'profile/:userId', component: ProfileComponent },
-  { path: 'group/:groupId', component: GroupComponent },
+  { path: 'group/:groupId', component: GroupComponent, canActivate: [SignedInGuard] },
+  { path: 'classes', component: ClassesComponent, canActivate: [SignedInGuard] },
   { path: '**', component: ErrorComponent }
 ];
 
