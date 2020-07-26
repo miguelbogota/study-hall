@@ -6,6 +6,9 @@ import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './routes/user/user.module';
+import { SubjectModule } from './routes/subject/subject.module';
+import { GroupModule } from './routes/group/group.module';
+import { ChatModule } from './routes/chat/chat.module';
 
 @Module({
   imports: [
@@ -17,7 +20,10 @@ import { UserModule } from './routes/user/user.module';
       })
     }),
     AuthModule,
-    UserModule
+    UserModule,
+    SubjectModule,
+    GroupModule,
+    ChatModule
   ],
   controllers: [AppController],
   providers: [AppService]
