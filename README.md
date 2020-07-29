@@ -16,7 +16,7 @@ Study hall es una herramineta que permite a tanto estudiantes como profesores da
   - [NestJS](https://nestjs.com) - Back End Framework API.
   - [MongoDB](https://www.mongodb.com) - Motor de Base de Datos.
   - [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) - Hosting de Base de Datos.
-  - [IBM Cloud Foundry](https://www.ibm.com/cloud/cloud-foundry) - Hosting Back End.
+  - [Heroku](https://www.heroku.com) - Hosting Back End.
 
 * Front End: [README.md](https://github.com/miguelbogota/study-hall/tree/master/front-end).
   - [Angular 10](https://angular.io) - Front End Framework.
