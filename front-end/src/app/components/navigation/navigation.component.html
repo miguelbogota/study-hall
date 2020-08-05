@@ -1,1 +1,32 @@
-<p>navigation works!</p>
+<!-- Barra de navegacion con Bootstrap -->
+<nav class="navbar navbar-expand-md navbar-dark bg-dark my-2 navbar-custom">
+
+  <a class="navbar-brand" [routerLink]="['/']">Study Hall</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbar">
+    <!-- Links de la pagina -->
+    <div class="navbar-nav mr-auto">
+      <!-- Actualmente no tiene links que se puedan ver tanto logeado como no -->
+    </div>
+
+    <!-- Autenticacion y perfil -->
+    <ng-container *ngIf="!authState; else signed">
+      <div class="navbar-nav">
+        <a class="nav-item nav-link" [routerLink]="['/signin']" routerLinkActive="active">Iniciar Sesión</a>
+        <a class="nav-item nav-link" [routerLink]="['/signup']" routerLinkActive="active">Crear Cuenta</a>
+      </div>
+    </ng-container>
+
+    <ng-template #signed>
+      <div class="navbar-nav">
+        <a class="nav-item nav-link" [routerLink]="['/classes']" routerLinkActive="active">Classes</a>
+        <a class="nav-item nav-link" [routerLink]="['/profile/' + authState.username]" routerLinkActive="active">Perfil</a>
+        <a class="nav-item nav-link" style="cursor: pointer;" (click)="signOut()">Cerrar Sesión</a>
+      </div>
+    </ng-template>
+
+  </div>
+</nav>
