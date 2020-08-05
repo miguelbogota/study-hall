@@ -22,8 +22,8 @@
 
     <ng-template #signed>
       <div class="navbar-nav">
-        <a class="nav-item nav-link" [routerLink]="['/classes']" routerLinkActive="active">Classes</a>
-        <a class="nav-item nav-link" [routerLink]="['/profile/' + authState.username]" routerLinkActive="active">Perfil</a>
+        <a class="nav-item nav-link" [routerLink]="['/subjects']" routerLinkActive="active">Asignaturas</a>
+        <a class="nav-item nav-link" [routerLink]="['/profile/' + authState.user.username]" routerLinkActive="active">Perfil</a>
         <a class="nav-item nav-link" style="cursor: pointer;" (click)="signOut()">Cerrar Sesión</a>
       </div>
     </ng-template>
