@@ -1,24 +1,31 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule } from './config/config.module';
+import { ConfigService } from './config/config.service';
 import { AuthModule } from './auth/auth.module';
-// Modulos de las rutas
-import { UsersModule } from './routes/users/users.module';
-import { SubjectsModule } from './routes/subjects/subjects.module';
-import { GroupsModule } from './routes/groups/groups.module';
+import { UserModule } from './routes/user/user.module';
+import { SubjectModule } from './routes/subject/subject.module';
+import { GroupModule } from './routes/group/group.module';
+import { ChatModule } from './routes/chat/chat.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
-    MongooseModule.forRoot('mongodb://localhost:27017/study-hall', { useNewUrlParser: true, useFindAndModify: true }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        uri: configService.get('MONGODB_URI')
+      })
+    }),
     AuthModule,
-    UsersModule,
-    SubjectsModule,
-    GroupsModule
+    UserModule,
+    SubjectModule,
+    GroupModule,
+    ChatModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService]
 })
 export class AppModule { }

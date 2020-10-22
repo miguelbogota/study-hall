@@ -2,34 +2,38 @@
   <div class="col-lg-6 custom-colun">
 
     <ng-container *ngIf="!isLoading; else loaded">
-      <form class="border p-5 mt-3" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+      <form class="border p-5 mt-3" [formGroup]="signUpForm" (ngSubmit)="formSubmit()">
 
-          <h4>Unete</h4>
-          <p>¡Crea un cuenta completamente gratis!</p>
+        <h4>Unete</h4>
+        <p>¡Crea un cuenta completamente gratis!</p>
 
-          <div class="form-group">
-            <label>Usuario</label>
-            <input type="text" class="form-control" formControlName="username">
-          </div>
-          <div class="form-group">
-            <label>Correo Electrónico</label>
-            <input type="text" class="form-control" formControlName="email">
-          </div>
-          <div class="form-group">
-            <label>Contraseña</label>
-            <input type="password" class="form-control" formControlName="password">
-          </div>
-          <div class="form-group mb-3">
-            <label>Repetir Contraseña</label>
-            <input type="password" class="form-control" formControlName="passwordRepeat">
-          </div>
+        <div class="form-group">
+          <label>Usuario</label>
+          <input type="text" class="form-control" formControlName="username">
+        </div>
+        <div class="form-group">
+          <label>Nombre Completo</label>
+          <input type="text" class="form-control" formControlName="displayName">
+        </div>
+        <div class="form-group">
+          <label>Correo Electrónico</label>
+          <input type="text" class="form-control" formControlName="email">
+        </div>
+        <div class="form-group">
+          <label>Contraseña</label>
+          <input type="password" class="form-control" formControlName="password">
+        </div>
+        <div class="form-group mb-3">
+          <label>Repetir Contraseña</label>
+          <input type="password" class="form-control" formControlName="passwordRepeat">
+        </div>
 
-          <small class="text-danger d-block mb-3" *ngIf="errorMessage">
-            {{ errorMessage }}
-          </small>
+        <small class="text-danger d-block mb-3" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </small>
 
-          <button type="submit" [disabled]="!signupForm.valid" class="btn btn-primary">Crear Cuenta</button>
-        </form>
+        <button type="submit" [disabled]="!signUpForm.valid" class="btn btn-primary">Crear Cuenta</button>
+      </form>
     </ng-container>
 
     <ng-template #loaded>

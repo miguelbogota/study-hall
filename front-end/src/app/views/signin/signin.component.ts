@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
-import { AuthService } from 'src/app/core/services/auth/auth.service'
+import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -10,16 +10,16 @@ import { Router } from '@angular/router';
 })
 export class SigninComponent implements OnInit {
 
-  signinForm: FormGroup;
+  signInForm: FormGroup = null;
   isLoading = false;
-  errorMessage: string = null;
+  errorMessage = null;
 
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
     private router: Router
   ) {
-    this.signinForm = this.fb.group({
+    this.signInForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
     });
@@ -28,22 +28,22 @@ export class SigninComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onSubmit() {
+  formSubmit(): void {
     this.isLoading = true;
     this.auth.signIn(this.username.value, this.password.value)
-    .subscribe(u => {
-      if (u) {
-        this.router.navigate([`/profile/${this.username.value}`]);
-        this.isLoading = false;
-      }
-      else {
-        this.errorMessage = 'Las credenciales no son correctas, por favor verificalas.';
-      }
-    });
+      .subscribe(u => {
+        if (u) {
+          this.router.navigate([`/profile/${this.username.value}`]);
+          this.isLoading = false;
+        }
+        else {
+          this.errorMessage = 'Las credenciales no son correctas, por favor verificalas.';
+        }
+      });
   }
 
   // Getters
-  get username(): AbstractControl { return this.signinForm.get('username'); }
-  get password(): AbstractControl { return this.signinForm.get('password'); }
+  get username(): AbstractControl { return this.signInForm.get('username'); }
+  get password(): AbstractControl { return this.signInForm.get('password'); }
 
 }

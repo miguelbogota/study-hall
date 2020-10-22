@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { UserService } from 'src/app/core/services/user/user.service';
 import { Router } from '@angular/router';
-import { User } from 'src/app/core/models/user';
+import { UserInterface } from 'src/app/core/models/user.model';
 
 @Component({
   selector: 'app-signup',
@@ -12,7 +12,7 @@ import { User } from 'src/app/core/models/user';
 })
 export class SignupComponent implements OnInit {
 
-  signupForm: FormGroup;
+  signUpForm: FormGroup;
   errorMessage: string = null;
   isLoading = false;
 
@@ -22,37 +22,39 @@ export class SignupComponent implements OnInit {
     private userS: UserService,
     private router: Router
   ) {
-    this.signupForm = this.fb.group({
+    this.signUpForm = this.fb.group({
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       passwordRepeat: ['', Validators.required],
+      displayName: ['', Validators.required]
     });
   }
 
   ngOnInit(): void {
   }
 
-  onSubmit() {
+  formSubmit() {
     this.isLoading = true;
     if (this.password.value === this.passwordRepeat.value) {
-      
+
       this.userS.getUser(this.username.value).subscribe(u => {
         if (!u.username) {
-          const user: User = {
+          const user: UserInterface = {
             email: this.email.value,
             password: this.password.value,
             photoUrl: '',
             status: '¡Hola! ¡Soy nuevo!',
             subjectIds: [],
             type: 'student',
-            username: this.username.value
+            username: this.username.value,
+            displayName: this.displayName.value
           }
           this.auth.signUp(user)
             .subscribe(u => {
-              this.router.navigate(['/singin']);
+              this.router.navigate(['/signin']);
               this.isLoading = false;
-          });
+            });
         }
         else {
           this.errorMessage = 'El nombre de usuario ya existe, escoge otro por favor.';
@@ -67,9 +69,10 @@ export class SignupComponent implements OnInit {
   }
 
   // Getters
-  get username(): AbstractControl { return this.signupForm.get('username'); }
-  get email(): AbstractControl { return this.signupForm.get('email'); }
-  get password(): AbstractControl { return this.signupForm.get('password'); }
-  get passwordRepeat(): AbstractControl { return this.signupForm.get('passwordRepeat'); }
+  get username(): AbstractControl { return this.signUpForm.get('username'); }
+  get email(): AbstractControl { return this.signUpForm.get('email'); }
+  get password(): AbstractControl { return this.signUpForm.get('password'); }
+  get passwordRepeat(): AbstractControl { return this.signUpForm.get('passwordRepeat'); }
+  get displayName(): AbstractControl { return this.signUpForm.get('displayName'); }
 
 }

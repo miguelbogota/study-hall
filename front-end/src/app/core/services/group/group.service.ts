@@ -1,30 +1,37 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Group, Chat } from '../../models/group';
+import { Observable } from 'rxjs';
+import { GroupInterface } from '../../models/group.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GroupService {
 
+  private API = 'https://study-hall-api.herokuapp.com/api/groups';
+
   constructor(
     private http: HttpClient
   ) { }
 
-  getGroup(code: string) {
-    return this.http.get<Group>(`/api/groups/${code}`);
+  public getGroups(): Observable<GroupInterface[]> {
+    return this.http.get<GroupInterface[]>(this.API);
   }
 
-  setGroup(group: Group) {
-    return this.http.post<Group>(`/api/groups`, group);
+  public getGroup(code: string): Observable<GroupInterface> {
+    return this.http.get<GroupInterface>(`${this.API}/${code}`);
   }
 
-  updateGroup(code: string, group: Group) {
-    return this.http.put<Group>(`/api/groups/${code}`, group);
+  public addGroup(group: GroupInterface): Observable<GroupInterface> {
+    return this.http.post<GroupInterface>(this.API, group);
   }
 
-  sendChat(code: string, chat: Chat) {
-    return this.http.put<Group>(`/api/groups/chat/${code}`, chat);
+  public updateGroup(code: string, group: GroupInterface): Observable<GroupInterface> {
+    return this.http.put<GroupInterface>(`${this.API}/${code}`, group);
+  }
+
+  public deleteGroup(code: string): Observable<GroupInterface> {
+    return this.http.delete<GroupInterface>(`${this.API}/${code}`);
   }
 
 }
